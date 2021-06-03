@@ -12,6 +12,33 @@ export default class LoginScreen extends React.Component{
         }
     }
 
+    login=async(email,password)=>{
+        if(email && password ){
+            try{
+                const response=await firebase.auth().signInWithEmailAndPassword(email,password)
+                if(response){
+                    this.props.navigation.navigate('Transaction');
+                }
+            }
+            catch(error){
+                switch(error.code){
+                    case 'auth/user-not-found':
+                        Alert.alert('USER DOES NOT EXIST');
+                        console.log('user does not exist');
+                        break;
+                    case 'auth/invalid-email':
+                        Alert.alert('INCORRECT EMAIL OR PASSWORD');
+                        console.log('incorrect email or password');
+                        break;
+                    default:break;
+                }
+            }
+        }
+        else{
+            Alert.alert('ENTER EMAIL AND PASSWORD');
+        }
+    }
+
     render(){
         return(
             <KeyboardAvoidingView style={{alignItems:'center',marginTop:20}}>
